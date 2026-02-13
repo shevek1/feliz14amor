@@ -1,106 +1,125 @@
 ---
 ---
 
-<section id="counter" class="counter-section">
-  <h2 class="glow">Mi amor por vos empezó hace...</h2>
-  
-  <div class="timer-container">
-    <div class="time-unit">
-      <span id="years" class="number text-fire">0</span>
-      <span class="label">Años</span>
-    </div>
-    <div class="time-unit">
-      <span id="months" class="number text-fire">0</span>
-      <span class="label">Meses</span>
-    </div>
-    <div class="time-unit">
-      <span id="days" class="number text-fire">0</span>
-      <span class="label">Días</span>
-    </div>
-    <div class="time-unit">
-      <span id="hours" class="number text-fire">0</span>
-      <span class="label">Horas</span>
-    </div>
-    <div class="time-unit">
-      <span id="minutes" class="number text-fire">0</span>
-      <span class="label">Minutos</span>
-    </div>
-    <div class="time-unit">
-      <span id="seconds" class="number text-fire">0</span>
-      <span class="label">Segundos</span>
-    </div>
+<div class="love-navbar">
+  <span class="nav-label">Mi amor por vos empezó hace:</span>
+  <div id="nav-timer" class="nav-timer">
+    <div class="time-unit"><span id="years">0</span><span class="label">Años</span></div>
+    <span class="separator">·</span>
+    <div class="time-unit"><span id="months">0</span><span class="label">Meses</span></div>
+    <span class="separator">·</span>
+    <div class="time-unit"><span id="days">0</span><span class="label">Días</span></div>
+    <span class="separator">|</span>
+    <div class="time-unit"><span id="hours">00</span><span class="label">Hs</span></div>
+    <span class="separator">:</span>
+    <div class="time-unit"><span id="minutes">00</span><span class="label">Min</span></div>
+    <span class="separator">:</span>
+    <div class="time-unit"><span id="seconds">00</span><span class="label">Seg</span></div>
   </div>
-</section>
+</div>
 
 <style>
-  .counter-section {
-    padding: 4rem 1rem;
-    background: #000;
-    text-align: center;
-    border-top: 1px solid #333;
-    border-bottom: 1px solid #333;
-  }
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-  }
-
-  .timer-container {
+  .love-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 5, 5, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--fire-red);
+    padding: 0.8rem 1rem;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1.5rem;
-    flex-wrap: wrap;
-    font-family: 'Courier New', monospace; /* Monospaced for numbers */
+    z-index: 999;
+    box-shadow: 0 -5px 20px rgba(255, 60, 60, 0.2);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav-label {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+  }
+
+  .nav-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
   }
 
   .time-unit {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(255, 60, 60, 0.1);
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 60, 60, 0.3);
-    min-width: 100px;
-    box-shadow: 0 0 15px rgba(255, 60, 60, 0.1);
-    transition: transform 0.3s;
-  }
-
-  .time-unit:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 25px rgba(255, 119, 48, 0.2);
-    border-color: var(--fire-orange);
-  }
-
-  .number {
-    font-size: 3rem;
-    font-weight: 700;
     line-height: 1;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 0 10px rgba(255, 119, 48, 0.5);
+  }
+
+  .time-unit span:first-child {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--fire-orange);
+    text-shadow: 0 0 5px rgba(255, 60, 60, 0.5);
+    min-width: 20px;
+    text-align: center;
   }
 
   .label {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: var(--text-muted);
+    font-size: 0.6rem;
+    color: #888;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  .separator {
+    color: #555;
+    font-size: 1rem;
+    margin-top: -8px;
   }
 
   @media (max-width: 768px) {
-    .timer-container { gap: 1rem; }
-    .time-unit { min-width: 80px; padding: 1rem; }
-    .number { font-size: 2rem; }
-    .label { font-size: 0.8rem; }
+    .love-navbar {
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 0.6rem;
+    }
+    
+    .nav-label {
+      font-size: 0.9rem;
+    }
+
+    .time-unit span:first-child {
+      font-size: 1rem;
+    }
+    
+    .label {
+      font-size: 0.5rem;
+    }
+    
+    .separator { font-size: 0.8rem; }
+    
+    /* Ocultar etiquetas largas en movil si molesta */
+    .label { display: none; }
+    
+    /* Make simpler for mobile */
+    .nav-timer { gap: 0.3rem; }
+    .time-unit { flex-direction: row; align-items: baseline; gap: 2px; }
+    .time-unit::after {
+        content: attr(data-short);
+        font-size: 0.7rem;
+        color: #888;
+    }
   }
 </style>
 
 <script>
   function updateCounter() {
-    const startDate = new Date('2024-08-11T00:00:00'); // Midnight
+    const startDate = new Date('2024-08-11T00:00:00'); 
     const now = new Date();
     
     let years = now.getFullYear() - startDate.getFullYear();
@@ -110,7 +129,7 @@
     let minutes = now.getMinutes() - startDate.getMinutes();
     let seconds = now.getSeconds() - startDate.getSeconds();
 
-    // Adjust for negative values
+    // Adjust for negative values logic (calendar accurate)
     if (seconds < 0) {
       seconds += 60;
       minutes--;
@@ -124,7 +143,6 @@
       days--;
     }
     if (days < 0) {
-      // Get number of days in previous month
       const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
       days += prevMonth.getDate();
       months--;
@@ -134,7 +152,6 @@
       years--;
     }
 
-    // Update DOM
     const els = {
       years: document.getElementById('years'),
       months: document.getElementById('months'),
@@ -145,13 +162,14 @@
     };
 
     if (els.years) els.years.textContent = years.toString();
-    if (els.months) els.months.textContent = months.toString().padStart(2, '0');
-    if (els.days) els.days.textContent = days.toString().padStart(2, '0');
+    if (els.months) els.months.textContent = months.toString();
+    if (els.days) els.days.textContent = days.toString();
+    
     if (els.hours) els.hours.textContent = hours.toString().padStart(2, '0');
     if (els.minutes) els.minutes.textContent = minutes.toString().padStart(2, '0');
     if (els.seconds) els.seconds.textContent = seconds.toString().padStart(2, '0');
   }
 
   setInterval(updateCounter, 1000);
-  updateCounter(); // Initial call
+  updateCounter();
 </script>
