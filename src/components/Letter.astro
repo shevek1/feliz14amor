@@ -11,26 +11,55 @@
       
       <div class="letter-content" id="letter-content">
         <div class="paper">
-          <p class="greeting">Coti, mi amor</p>
-          <p class="line">Te conocí manejando, siendo tu chofer, un viaje común que jamás olvidaré.</p>
-          <p class="line">Cuando bajaste y me saludaste, en tus ojos supe que fue el destino.</p>
-          <p class="line">Ese mensaje lo vi CUATRO HORAS DESPUÉS... Pensé que mi oportunidad se había ido. Pero dentro mío sentí algo distinto.</p>
-          <p class="line">Desde que te subiste eras mi novia en secreto.</p>
-          <p class="line">A veces mi familia no entiende y mis propios miedos quieren hablar, pero desde el primer día supe tu verdad.</p>
-          <p class="line">Tu pureza me abrazó como promesa.</p>
-          <p class="line">Tu romanticismo me escribe poemas, y en cada palabra tuya me convencés que sos el amor que buscaba sin buscar.</p>
-          <p class="line">Hoy sé que no me voy a dejar llevar por dudas ajenas, ni sombras pasajeras. Xq te elijo a vos, una y mil veces, mi amor eterno, mi compañera.</p>
-          <p class="line">Hoy 14 de San Valentín, este poema quedará para la eternidad.</p>
-          <p class="line">Sé que mientras crezcamos juntos nos gustaremos más, paso a paso eternamente.</p>
-          <p class="line">Coti, mi vida, mi amor verdadero, la que me inspira, me calma y me enciende.</p>
-          <p class="line strong">Te elijo en este presente y para siempre. ❤️</p>
-          <p class="signature">Tuyo siempre,<br><span>Fabri</span></p>
+          
+          <!-- Página 1 -->
+          <div class="page active" data-page="1">
+            <p class="greeting">Coti, mi amor</p>
+            <p class="line">Te conocí manejando, siendo tu chofer, un viaje común que jamás olvidaré.</p>
+            <p class="line">Cuando bajaste y me saludaste, en tus ojos supe que fue el destino.</p>
+            <p class="line">Ese mensaje lo vi CUATRO HORAS DESPUÉS... Pensé que mi oportunidad se había ido. Pero dentro mío sentí algo distinto.</p>
+            <p class="line">Desde que te subiste eras mi novia en secreto.</p>
+          </div>
+
+          <!-- Página 2 -->
+          <div class="page" data-page="2">
+            <p class="line">A veces mi familia no entiende y mis propios miedos quieren hablar, pero desde el primer día supe tu verdad.</p>
+            <p class="line">Tu pureza me abrazó como promesa.</p>
+            <p class="line">Tu romanticismo me escribe poemas, y en cada palabra tuya me convencés que sos el amor que buscaba sin buscar.</p>
+          </div>
+
+          <!-- Página 3 -->
+          <div class="page" data-page="3">
+            <p class="line">Hoy sé que no me voy a dejar llevar por dudas ajenas, ni sombras pasajeras. Xq te elijo a vos, una y mil veces, mi amor eterno, mi compañera.</p>
+            <p class="line">Hoy 14 de San Valentín, este poema quedará para la eternidad.</p>
+          </div>
+
+          <!-- Página 4 -->
+          <div class="page" data-page="4">
+            <p class="line">Sé que mientras crezcamos juntos nos gustaremos más, paso a paso eternamente.</p>
+            <p class="line">Coti, mi vida, mi amor verdadero, la que me inspira, me calma y me enciende.</p>
+            <p class="line strong">Te elijo en este presente y para siempre. ❤️</p>
+            <p class="signature">Tuyo siempre,<br><span>Fabri</span></p>
+          </div>
+
+          <!-- Controles de navegación -->
+          <div class="paper-controls">
+            <button class="nav-arrow prev" hidden>&lt;</button>
+            <span class="page-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </span>
+            <button class="nav-arrow next">&gt;</button>
+          </div>
+
         </div>
       </div>
       
       <div class="seal">❤️</div>
     </div>
-    <p class="instruction">Tocá el sobre para abrirlo, hermosa mia</p>
+    <p class="instruction">Tocá el sobre para abrirlo, hermosa mía</p>
   </div>
 </section>
 
@@ -48,16 +77,21 @@
   .envelope-wrapper {
     position: relative;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
   .envelope {
     width: 300px;
     height: 200px;
-    background: #c0392b; /* Rojo base */
+    background: #c0392b;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.6s ease;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin-bottom: 2rem; /* Espacio para la instrucción */
   }
 
   .envelope:hover {
@@ -81,7 +115,7 @@
     top: 0;
     left: 0;
     border-width: 100px 150px 0 150px;
-    border-color: #e74c3c transparent transparent transparent; /* Rojo claro */
+    border-color: #e74c3c transparent transparent transparent;
     transform-origin: top;
     transition: transform 0.6s 0.2s;
     z-index: 5;
@@ -145,8 +179,8 @@
   }
   
   .envelope.open .letter-content {
-    top: -250px;
-    height: 420px; /* Un poco más alto para el texto extra */
+    top: -280px;
+    height: 480px;
     z-index: 4;
     overflow: visible;
   }
@@ -165,7 +199,9 @@
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s 0.8s, transform 0.5s 0.8s;
-    overflow-y: auto; /* Enable scrolling */
+    display: flex;
+    flex-direction: column;
+    position: relative;
   }
 
   .envelope.open .paper {
@@ -173,65 +209,167 @@
     transform: translateY(0);
   }
 
+  /* Pagination */
+  .page {
+    display: none;
+    flex: 1;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .page.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .paper-controls {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(0,0,0,0.1);
+  }
+
+  .nav-arrow {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--fire-red);
+    cursor: pointer;
+    padding: 0 10px;
+    font-weight: bold;
+    transition: transform 0.2s;
+  }
+
+  .nav-arrow:hover:not([hidden]) {
+    transform: scale(1.2);
+  }
+
+  .page-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 50%;
+    transition: background 0.3s;
+  }
+
+  .dot.active {
+    background: var(--fire-red);
+  }
+
   .greeting {
     font-weight: 700;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
     color: var(--fire-red);
   }
 
   .line {
-    font-size: 1.1rem; /* Texto un poco más legible */
-    line-height: 1.5rem;
-    margin-bottom: 0.5rem;
-    opacity: 0;
-    transform: translateX(-10px);
+    font-size: 1rem;
+    line-height: 1.4rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .line p {
+    margin: 0;
+  }
+  
+  .signature {
+    margin-top: 1rem;
+    text-align: right;
+    font-style: italic;
   }
 
-  /* Reveal animation */
-  .envelope.open .line:nth-child(2) { animation: reveal 0.8s 1.2s forwards; }
-  .envelope.open .line:nth-child(3) { animation: reveal 0.8s 1.6s forwards; }
-  .envelope.open .line:nth-child(4) { animation: reveal 0.8s 2.0s forwards; }
-  .envelope.open .line:nth-child(5) { animation: reveal 0.8s 2.4s forwards; }
-  .envelope.open .line:nth-child(6) { animation: reveal 0.8s 2.8s forwards; }
-  .envelope.open .line.strong { animation: reveal 0.8s 3.2s forwards; font-weight: 700; color: var(--fire-red); }
-  .envelope.open .signature { animation: reveal 0.8s 3.6s forwards; margin-top: 1.5rem; text-align: right; }
-
-  @keyframes reveal {
-    to { opacity: 1; transform: translateX(0); }
-  }
-
+  /* Centered Instruction */
   .instruction {
     text-align: center;
-    margin-top: 2rem;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 1rem;
     animation: bounce 2s infinite;
+    position: absolute;
+    bottom: -60px; /* Debajo del sobre */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    pointer-events: none;
   }
 
   @media (min-width: 768px) {
-    .envelope { width: 500px; height: 350px; }
+    .envelope { width: 500px; height: 350px; margin-bottom: 0; }
     .top { border-width: 175px 250px 0 250px; }
     .right { border-width: 175px 175px 175px 0; }
     .bottom { border-width: 0 250px 175px 250px; }
     .left { border-width: 175px 0 175px 175px; }
     
     .letter-content { width: 480px; }
-    .envelope.open .letter-content { top: -300px; height: 500px; }
+    .envelope.open .letter-content { top: -300px; height: 550px; }
     
     .paper { padding: 3rem; font-size: 1.3rem; background-size: 100% 2rem; line-height: 2rem; }
-    .line { line-height: 2rem; margin-bottom: 1rem; }
+    .line { line-height: 2rem; margin-bottom: 1rem; font-size: 1.2rem; }
+    
+    .instruction {
+       bottom: -80px;
+       font-size: 1.1rem;
+    }
   }
 </style>
 
 <script>
+  // DOM Elements
   const envelope = document.getElementById('envelope');
   const instruction = document.querySelector('.instruction') as HTMLElement;
+  const prevBtn = document.querySelector('.prev') as HTMLButtonElement;
+  const nextBtn = document.querySelector('.next') as HTMLButtonElement;
+  const pages = document.querySelectorAll('.page');
+  const dots = document.querySelectorAll('.dot');
+  
+  let currentPage = 1;
+  const totalPages = pages.length;
 
-  if (envelope) {
-    envelope.addEventListener('click', () => {
-      envelope.classList.toggle('open');
-      if (instruction) instruction.style.opacity = '0';
-    });
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    
+    // Abrir sobre
+    if (target.closest('.envelope') && !target.closest('.paper-controls')) {
+       envelope?.classList.toggle('open');
+       if (instruction) instruction.style.opacity = '0';
+    }
+
+    // Navegación Next
+    if (target.closest('.next')) {
+       e.stopPropagation();
+       if (currentPage < totalPages) updatePage(currentPage + 1);
+    }
+
+    // Navegación Prev
+    if (target.closest('.prev')) {
+       e.stopPropagation();
+       if (currentPage > 1) updatePage(currentPage - 1);
+    }
+  });
+
+  function updatePage(newPage) {
+    // Update pages
+    pages.forEach(p => p.classList.remove('active'));
+    document.querySelector(`.page[data-page="${newPage}"]`)?.classList.add('active');
+
+    // Update dots
+    dots.forEach(d => d.classList.remove('active'));
+    if(dots[newPage-1]) dots[newPage-1].classList.add('active');
+
+    // Update buttons state
+    if (prevBtn) prevBtn.hidden = newPage === 1;
+    if (nextBtn) nextBtn.hidden = newPage === totalPages;
+
+    currentPage = newPage;
   }
 </script>
