@@ -1,152 +1,300 @@
 ---
 ---
 
-<div id="easter-egg" class="hidden-heart" title="?">
+<div id="hidden-heart" class="secret-heart" title="?">
   ❤️
 </div>
 
-<div id="surprise-message" class="surprise-overlay hidden">
-  <div class="message-box">
-    <h2>¡Encontraste mi corazón!</h2>
-    <p>Así como encontraste este secreto,<br>tú encontraste el camino a mi corazón ❤️🔥</p>
-    <button id="close-surprise">Cerrar</button>
+<div id="surprise-modal" class="surprise-modal">
+  <div class="modal-content">
+    <div class="fire-header">🔥 ❤️🔥 🔥</div>
+    
+    <h2>¡LO ENCONTRASTE, MI LOQUITA!</h2>
+    
+    <div class="message-body">
+      <p>Mi corazón es tuyo y no hay devolución.</p>
+      <p>Si me dejás, me muero.</p>
+      <p class="highlight">Literal. No es joda.</p>
+      <p>Sos todo lo que necesito en esta vida.</p>
+      <p class="final-love">Te amo con locura ❤️🔥</p>
+    </div>
+
+    <button id="close-modal" class="fire-btn">Cerrar ❤️</button>
   </div>
 </div>
 
 <style>
-  .hidden-heart {
+  /* Hidden Heart */
+  .secret-heart {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
-    font-size: 1rem;
-    opacity: 0.05;
+    bottom: 20px;
+    left: 20px;
+    font-size: 25px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
+    opacity: 0.3;
     z-index: 9999;
-    transition: opacity 0.3s;
+    filter: drop-shadow(0 0 5px rgba(255, 60, 60, 0.6));
+    animation: heartbeat 2s ease-in-out infinite;
+    transition: all 0.3s ease;
+    user-select: none;
   }
 
-  .hidden-heart:hover {
+  .secret-heart:hover {
     opacity: 1;
+    filter: drop-shadow(0 0 15px rgba(255, 60, 60, 1));
     transform: scale(1.2);
   }
 
-  /* Surprise Overlay */
-  .surprise-overlay {
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Modal Overlay */
+  .surprise-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.9);
     z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
   }
 
-  .hidden { display: none; }
+  .surprise-modal.active {
+    opacity: 1;
+    pointer-events: all;
+  }
 
-  .message-box {
-    background: #fff;
-    color: #333;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 80%;
-    box-shadow: 0 0 50px var(--fire-red);
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Modal Content */
+  .modal-content {
+    background: rgba(20, 10, 10, 0.95);
     border: 2px solid var(--gold);
-  }
-  
-  h2 {
-    color: var(--fire-red);
-    margin-bottom: 1rem;
-  }
-  
-  p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-  }
-  
-  button {
-    background: var(--fire-orange);
-    color: white;
-    border: none;
-    padding: 0.5rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    width: 450px;
+    box-shadow: 0 0 50px rgba(255, 60, 60, 0.5);
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
   }
 
-  @keyframes popIn {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+  .surprise-modal.active .modal-content {
+    transform: scale(1);
+  }
+
+  /* Text Styles */
+  .fire-header {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    animation: pulse 1s infinite alternate;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(255, 60, 60, 0.8);
+    margin-bottom: 2rem;
+    line-height: 1.2;
+  }
+
+  .message-body p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: #eee;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .surprise-modal.active .message-body p {
+    animation: fadeSlideUp 0.5s forwards;
+  }
+
+  /* Stagger animation delays */
+  .message-body p:nth-child(1) { animation-delay: 0.2s; }
+  .message-body p:nth-child(2) { animation-delay: 0.5s; }
+  .message-body p:nth-child(3) { animation-delay: 0.8s; }
+  .message-body p:nth-child(4) { animation-delay: 1.1s; }
+  .message-body p:nth-child(5) { animation-delay: 1.4s; }
+
+  .highlight {
+    color: var(--fire-orange);
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  .final-love {
+    font-size: 1.8rem !important;
+    color: var(--fire-red) !important;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    text-shadow: 0 0 15px rgba(255, 60, 60, 0.5);
+  }
+
+  button {
+    margin-top: 2rem;
+    background: linear-gradient(45deg, #c0392b, #e74c3c);
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 60, 60, 0.4);
+    transition: transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #e74c3c, #ff6b6b);
+  }
+
+  @keyframes fadeSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.7; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1.05); }
+  }
+
+  /* Confetti Particle Style (Dynamically injected but base styles here) */
+  :global(.confetti-particle) {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 10001;
   }
 </style>
 
 <script>
-  const heart = document.getElementById('easter-egg');
-  const overlay = document.getElementById('surprise-message');
-  const closeBtn = document.getElementById('close-surprise');
+  const heart = document.getElementById('hidden-heart');
+  const modal = document.getElementById('surprise-modal');
+  const closeBtn = document.getElementById('close-modal');
 
-  function explodeConfetti(x, y) {
-    const colors = ['#ff3c3c', '#ff4757', '#ffd700', '#ffffff'];
-    const particleCount = 100;
+  // Sound Logic using Web Audio API
+  function playHeartSound() {
+    // @ts-ignore
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
     
-    for (let i = 0; i < particleCount; i++) {
+    const audioCtx = new AudioContext();
+    
+    // Osc 1 (Main tone)
+    const osc1 = audioCtx.createOscillator();
+    osc1.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc1.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+    osc1.type = 'sine';
+    
+    // Osc 2 (Sparkle)
+    const osc2 = audioCtx.createOscillator();
+    osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc2.type = 'triangle';
+    
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc1.start();
+    osc2.start();
+    osc1.stop(audioCtx.currentTime + 0.5);
+    osc2.stop(audioCtx.currentTime + 0.5);
+  }
+
+  // Helper to create confetti elements
+  function createConfettiPiece(x, y, shapes, colors) {
         const el = document.createElement('div');
-        el.style.position = 'fixed';
+        el.className = 'confetti-particle';
+        el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        el.style.color = colors[Math.floor(Math.random() * colors.length)];
         el.style.left = x + 'px';
         el.style.top = y + 'px';
-        el.style.width = '8px';
-        el.style.height = '8px';
-        el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        el.style.borderRadius = '50%';
-        el.style.pointerEvents = 'none';
-        el.style.zIndex = '10001';
+        el.style.fontSize = (Math.random() * 15 + 10) + 'px';
         
-        // Random velocity
+        // Physics
         const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 10 + 2;
+        const velocity = Math.random() * 15 + 5;
         const vx = Math.cos(angle) * velocity;
-        const vy = Math.sin(angle) * velocity;
+        const vy = Math.sin(angle) * velocity - 5; // Upward bias
         
+        return { el, vx, vy };
+  }
+
+  // Confetti Logic
+  function fireConfetti(x, y) {
+    const colors = ['#ff3c3c', '#ff7730', '#ffb830', '#ff69b4', '#ffd700'];
+    const shapes = ['♥', '●', '■', '★'];
+    const count = window.innerWidth < 768 ? 40 : 80;
+
+    for (let i = 0; i < count; i++) {
+        const { el, vx, vy } = createConfettiPiece(x, y, shapes, colors);
         document.body.appendChild(el);
 
+        let posX = x;
+        let posY = y;
+        let velX = vx;
+        let velY = vy;
         let opacity = 1;
-        let pX = x;
-        let pY = y;
-        let pVy = vy;
+        let rotation = Math.random() * 360;
 
         const animate = () => {
-            pX += vx;
-            pY += pVy;
-            pVy += 0.2; // Gravity
-            opacity -= 0.02;
-            
-            el.style.left = pX + 'px';
-            el.style.top = pY + 'px';
+            velY += 0.5; // Gravity
+            posX += velX;
+            posY += velY;
+            rotation += 5;
+            opacity -= 0.015;
+
+            el.style.transform = `translate(${posX - x}px, ${posY - y}px) rotate(${rotation}deg)`;
             el.style.opacity = opacity.toString();
-            
-            if (opacity > 0) {
-                requestAnimationFrame(animate);
-            } else {
-                el.remove();
-            }
+
+            if (opacity > 0) requestAnimationFrame(animate);
+            else el.remove();
         };
         requestAnimationFrame(animate);
     }
   }
 
-  if (heart && overlay && closeBtn) {
+  if (heart && modal && closeBtn) {
     heart.addEventListener('click', (e) => {
-        explodeConfetti(e.clientX, e.clientY);
+        // 1. Animation punch
+        heart.style.transform = 'scale(2)';
+        heart.style.opacity = '0';
+        
+        // 2. Sound
+        playHeartSound();
+
+        // 3. Vibration
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+        // 4. Confetti
+        fireConfetti(e.clientX, e.clientY);
+
+        // 5. Show Modal (delayed)
         setTimeout(() => {
-            overlay.classList.remove('hidden');
-        }, 500);
+            modal.classList.add('active');
+            heart.style.display = 'none'; // Lock it
+        }, 300);
     });
-    
+
     closeBtn.addEventListener('click', () => {
-        overlay.classList.add('hidden');
+        modal.classList.remove('active');
     });
   }
 </script>
