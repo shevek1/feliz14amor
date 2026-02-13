@@ -1,0 +1,348 @@
+---
+---
+
+<section id="hero">
+  <canvas id="fire-canvas"></canvas>
+  <div class="content">
+    <div class="text-container">
+      <h1 class="glow">Coti, el amor de mi vida...</h1>
+      <div id="typewriter" class="typewriter-text"></div>
+    </div>
+    
+    <div class="controls">
+      <button id="play-music" class="fire-btn glow" aria-label="Reproducir música">
+        <span class="icon">🔥</span>
+        <span class="label">Dale play a nuestro tema</span>
+      </button>
+      
+      <div class="hearts-container" id="hearts-container">
+        <!-- Generados aleatoriamente por JS -->
+      </div>
+    </div>
+
+    <div class="scroll-ind">
+      <span>Bajá un poquito</span>
+      <div class="arrow">↓</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-dark); /* Fallback */
+  }
+
+  /* Fire Canvas Background */
+  #fire-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--gold); /* Gold accent */
+    font-weight: 700;
+  }
+
+  .typewriter-text {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    line-height: 1.6;
+    min-height: 100px;
+    color: var(--text-primary);
+    white-space: pre-wrap; /* Preserve line breaks */
+  }
+
+  /* Cursor blinking animation */
+  .typewriter-text::after {
+    content: '|';
+    animation: blink 1s step-end infinite;
+    color: var(--fire-orange);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .controls {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .fire-btn {
+    background: linear-gradient(45deg, var(--fire-red), var(--fire-orange));
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    color: white;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 60, 60, 0.4);
+    z-index: 5;
+  }
+
+  .fire-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 119, 48, 0.6);
+  }
+
+  .icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px orange);
+  }
+
+  .scroll-ind {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+    40% { transform: translate(-50%, -10px); }
+    60% { transform: translate(-50%, -5px); }
+  }
+
+  /* Hearts Container */
+  .hearts-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Responsive Text */
+  @media (min-width: 768px) {
+    h1 { font-size: 4rem; }
+    .typewriter-text { font-size: 2rem; }
+  }
+</style>
+
+<script>
+  // Canvas Fire Effect
+  const canvas = document.getElementById('fire-canvas') as HTMLCanvasElement;
+  const ctx = canvas?.getContext('2d');
+  
+  if (canvas && ctx) {
+    let particles: Particle[] = [];
+    const maxParticles = 100; // Adjust for density
+    
+    // Resize canvas
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        life: number;
+        size: number;
+        color: string;
+
+        constructor() {
+            this.x = Math.random() * canvas.width;            
+            this.y = canvas.height + Math.random() * 100; // Start below screen
+            this.vx = (Math.random() - 0.5) * 1; // Slight drift
+            this.vy = -(Math.random() * 2 + 1); // Float up
+            this.life = Math.random() * 100 + 50; 
+            this.size = Math.random() * 3 + 1;
+            
+            // Random fire colors
+            const colors = ['#ff3c3c', '#ff4757', '#ff7730', '#ff6348', '#ffb830'];
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life--;
+            this.size *= 0.98; // Shrink
+        }
+
+        draw(ctx: CanvasRenderingContext2D) {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = (this.life / 100); // Fade out
+            ctx.fill();
+            ctx.globalAlpha = 1;
+
+            // Glow effect
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+        }
+    }
+
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear screen
+        
+        // Add new particles periodically
+        if (particles.length < maxParticles) {
+            particles.push(new Particle());
+        }
+
+        particles.forEach((p, index) => {
+            p.update();
+            p.draw(ctx);
+            if (p.life <= 0 || p.size <= 0.1) {
+                particles.splice(index, 1);
+                particles.push(new Particle()); // Respawn
+            }
+        });
+
+        requestAnimationFrame(animate);
+    };
+
+    animate();
+  }
+
+  // Typewriter Effect - Varied and Romantic for Coti
+  const phrases = [
+    "Sos mi lugar seguro en el mundo.",
+    "Cada día con vos es un regalo.",
+    "No te cambio por nada, sabés?",
+    "Te amo más que ayer, pero menos que mañana.",
+    "Gracias por hacerme tan feliz, Coti."
+  ];
+  
+  // Shuffle phrases to ensure variety each load (Fisher-Yates shuffle)
+  for (let i = phrases.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [phrases[i], phrases[j]] = [phrases[j], phrases[i]];
+  }
+  
+  const typeTarget = document.getElementById('typewriter');
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typeSpeed = 100;
+
+  function type() {
+    if (!typeTarget) return;
+
+    const currentPhrase = phrases[phraseIndex];
+    let displayText = isDeleting 
+      ? currentPhrase.substring(0, charIndex - 1) 
+      : currentPhrase.substring(0, charIndex + 1);
+      
+    typeTarget.textContent = displayText;
+
+    if (!isDeleting) charIndex++;
+    else charIndex--;
+
+    // Typing speed logic
+    let wait = typeSpeed;
+
+    if (isDeleting) wait /= 2;
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+      wait = 2000; // Pause at end
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length; // Next phrase
+      wait = 500;
+    }
+
+    setTimeout(type, wait);
+  }
+
+  // Start typing
+  if (typeTarget) setTimeout(type, 1000);
+
+  // Floating Hearts logic
+  function createHeart() {
+      const container = document.getElementById('hearts-container');
+      if (!container) return;
+
+      const heart = document.createElement('div');
+      heart.innerHTML = '❤️';
+      heart.style.position = 'absolute';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.bottom = '-20px';
+      heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+      heart.style.opacity = Math.random().toString();
+      heart.style.animation = `floatHeart ${Math.random() * 3 + 2}s linear`;
+      
+      container.appendChild(heart);
+
+      setTimeout(() => {
+          heart.remove();
+      }, 5000);
+  }
+
+  // Add global style for heart animation
+  const styleSheet = document.createElement("style");
+  styleSheet.innerText = `
+    @keyframes floatHeart {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(styleSheet);
+
+  setInterval(createHeart, 800);
+
+  // Play Music
+  const playBtn = document.getElementById('play-music');
+  
+  if (playBtn) {
+    playBtn.addEventListener('click', () => {
+      const event = new CustomEvent('play-music');
+      window.dispatchEvent(event);
+      // Don't hide, maybe just update text
+      const label = playBtn.querySelector('.label');
+      if (label) label.textContent = "¡Temazo sonando!";
+    });
+  }
+</script>

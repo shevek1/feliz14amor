@@ -1,0 +1,232 @@
+---
+---
+
+<section id="gallery" class="gallery-section">
+  <h2 class="section-title text-fire">Nuestros Momentos</h2>
+  
+  <div class="gallery-container">
+    <div class="track">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <div class="polaroid" data-index={i} style={`transform: rotate(${Math.random() * 10 - 5}deg);`}>
+          <div class="photo-frame">
+            <img src={`/images/foto${i + 1}.jpeg`} alt={`Recuerdo ${i + 1}`} loading="lazy" />
+            <div class="overlay"></div>
+          </div>
+          <div class="caption">Recuerdo #{i + 1}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden">
+    <button class="close-btn">&times;</button>
+    <button class="nav-btn prev">&lt;</button>
+    <img id="lightbox-img" src="" alt="Vista ampliada" />
+    <button class="nav-btn next">&gt;</button>
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    padding: 4rem 1rem;
+    background: var(--bg-dark-accent);
+    overflow: hidden;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .gallery-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 2rem 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar */
+  }
+  
+  .gallery-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .track {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+    width: max-content;
+  }
+
+  /* Polaroid Styles */
+  .polaroid {
+    background: #fff;
+    padding: 1rem 1rem 3rem 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, z-index 0.3s;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 280px;
+    position: relative;
+    border-radius: 2px;
+  }
+  
+  .polaroid:hover {
+    transform: scale(1.05) rotate(0deg) !important;
+    z-index: 10;
+    box-shadow: 0 10px 25px rgba(255, 60, 60, 0.3);
+  }
+
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .polaroid:hover img {
+    transform: scale(1.1);
+  }
+
+  /* Burn effect overlay */
+  .photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  .caption {
+    font-family: 'Indie Flower', cursive, sans-serif; /* Handwriting aesthetic if available, else standard */
+    color: #333;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .lightbox img {
+    max-width: 90%;
+    max-height: 80vh;
+    box-shadow: 0 0 50px rgba(255, 60, 60, 0.2);
+    border: 5px solid #fff;
+  }
+
+  .nav-btn, .close-btn {
+    position: absolute;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 3rem;
+    cursor: pointer;
+    padding: 1rem;
+    transition: color 0.3s;
+  }
+
+  .nav-btn:hover, .close-btn:hover {
+    color: var(--fire-orange);
+  }
+
+  .close-btn { top: 20px; right: 20px; }
+  .prev { left: 20px; }
+  .next { right: 20px; }
+
+  @media (max-width: 768px) {
+    .track { gap: 1rem; }
+    .polaroid { width: 220px; } 
+    .nav-btn { font-size: 2rem; }
+  }
+</style>
+
+<script>
+  // Lightbox Logic
+  const polaroids = document.querySelectorAll('.polaroid');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const closeBtn = document.querySelector('.close-btn');
+  const prevBtn = document.querySelector('.prev');
+  const nextBtn = document.querySelector('.next');
+  
+  let currentIndex = 0;
+  const total = polaroids.length;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    const img = polaroids[index].querySelector('img');
+    if (img && lightbox && lightboxImg) {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Disable scroll
+    }
+  }
+
+  function closeLightbox() {
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % total;
+    const img = polaroids[currentIndex].querySelector('img');
+    if (img && lightboxImg) lightboxImg.src = img.src;
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + total) % total;
+    const img = polaroids[currentIndex].querySelector('img');
+    if (img && lightboxImg) lightboxImg.src = img.src;
+  }
+
+  // Event Listeners
+  polaroids.forEach((p, i) => {
+    p.addEventListener('click', () => openLightbox(i));
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+  prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+
+  // Swipe support for mobile
+  let touchStartX = 0;
+  lightbox?.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+  lightbox?.addEventListener('touchend', e => {
+    const touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) nextImage();
+    if (touchEndX - touchStartX > 50) prevImage();
+  });
+  
+  // Close on background click
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+</script>

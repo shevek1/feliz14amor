@@ -1,0 +1,157 @@
+---
+---
+
+<section id="counter" class="counter-section">
+  <h2 class="glow">Mi amor por vos empezó hace...</h2>
+  
+  <div class="timer-container">
+    <div class="time-unit">
+      <span id="years" class="number text-fire">0</span>
+      <span class="label">Años</span>
+    </div>
+    <div class="time-unit">
+      <span id="months" class="number text-fire">0</span>
+      <span class="label">Meses</span>
+    </div>
+    <div class="time-unit">
+      <span id="days" class="number text-fire">0</span>
+      <span class="label">Días</span>
+    </div>
+    <div class="time-unit">
+      <span id="hours" class="number text-fire">0</span>
+      <span class="label">Horas</span>
+    </div>
+    <div class="time-unit">
+      <span id="minutes" class="number text-fire">0</span>
+      <span class="label">Minutos</span>
+    </div>
+    <div class="time-unit">
+      <span id="seconds" class="number text-fire">0</span>
+      <span class="label">Segundos</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .counter-section {
+    padding: 4rem 1rem;
+    background: #000;
+    text-align: center;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: var(--text-primary);
+  }
+
+  .timer-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: 'Courier New', monospace; /* Monospaced for numbers */
+  }
+
+  .time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 60, 60, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 60, 60, 0.3);
+    min-width: 100px;
+    box-shadow: 0 0 15px rgba(255, 60, 60, 0.1);
+    transition: transform 0.3s;
+  }
+
+  .time-unit:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(255, 119, 48, 0.2);
+    border-color: var(--fire-orange);
+  }
+
+  .number {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(255, 119, 48, 0.5);
+  }
+
+  .label {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .timer-container { gap: 1rem; }
+    .time-unit { min-width: 80px; padding: 1rem; }
+    .number { font-size: 2rem; }
+    .label { font-size: 0.8rem; }
+  }
+</style>
+
+<script>
+  function updateCounter() {
+    const startDate = new Date('2024-08-11T00:00:00'); // Midnight
+    const now = new Date();
+    
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+    let hours = now.getHours() - startDate.getHours();
+    let minutes = now.getMinutes() - startDate.getMinutes();
+    let seconds = now.getSeconds() - startDate.getSeconds();
+
+    // Adjust for negative values
+    if (seconds < 0) {
+      seconds += 60;
+      minutes--;
+    }
+    if (minutes < 0) {
+      minutes += 60;
+      hours--;
+    }
+    if (hours < 0) {
+      hours += 24;
+      days--;
+    }
+    if (days < 0) {
+      // Get number of days in previous month
+      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += prevMonth.getDate();
+      months--;
+    }
+    if (months < 0) {
+      months += 12;
+      years--;
+    }
+
+    // Update DOM
+    const els = {
+      years: document.getElementById('years'),
+      months: document.getElementById('months'),
+      days: document.getElementById('days'),
+      hours: document.getElementById('hours'),
+      minutes: document.getElementById('minutes'),
+      seconds: document.getElementById('seconds')
+    };
+
+    if (els.years) els.years.textContent = years.toString();
+    if (els.months) els.months.textContent = months.toString().padStart(2, '0');
+    if (els.days) els.days.textContent = days.toString().padStart(2, '0');
+    if (els.hours) els.hours.textContent = hours.toString().padStart(2, '0');
+    if (els.minutes) els.minutes.textContent = minutes.toString().padStart(2, '0');
+    if (els.seconds) els.seconds.textContent = seconds.toString().padStart(2, '0');
+  }
+
+  setInterval(updateCounter, 1000);
+  updateCounter(); // Initial call
+</script>

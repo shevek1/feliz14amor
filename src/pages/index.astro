@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Gallery from '../components/Gallery.astro';
+import Letter from '../components/Letter.astro';
+import Timeline from '../components/Timeline.astro';
+import Counter from '../components/Counter.astro';
+import MusicPlayer from '../components/MusicPlayer.astro';
+import EasterEgg from '../components/EasterEgg.astro';
+---
+
+<Layout title="Para Nosotros ❤️ | San Valentín">
+	<div class="fog-overlay"></div>
+	<div id="petals-container"></div>
+	
+	<main>
+		<Hero />
+		<Gallery />
+		<Letter />
+		<Timeline />
+		<Counter />
+	</main>
+
+	<MusicPlayer />
+	<EasterEgg />
+
+	<footer>
+		<p class="text-fire">Hecho con ❤️ para ti</p>
+	</footer>
+</Layout>
+
+<style>
+	/* Subtle Fog Overlay */
+	.fog-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog1.png') repeat-x;
+		background-size: 200% auto;
+		opacity: 0.1;
+		z-index: 0;
+		pointer-events: none;
+		animation: fog 60s linear infinite;
+	}
+
+	#petals-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 10;
+		overflow: hidden;
+	}
+
+	@keyframes fog {
+		0% { background-position: 0 0; }
+		100% { background-position: -200% 0; }
+	}
+
+	main {
+		position: relative;
+		z-index: 1;
+	}
+
+	footer {
+		text-align: center;
+		padding: 2rem;
+		background: #000;
+		position: relative;
+		z-index: 1;
+	}
+</style>
+
+<script>
+	// Falling Petals Effect
+	function createPetal() {
+		const container = document.getElementById('petals-container');
+		if (!container) return;
+
+		const petal = document.createElement('div');
+		petal.innerHTML = '🌹'; // Rose petal
+		petal.style.position = 'absolute';
+		petal.style.left = Math.random() * 100 + 'vw';
+		petal.style.top = '-50px';
+		petal.style.fontSize = Math.random() * 10 + 10 + 'px';
+		petal.style.opacity = (Math.random() * 0.5 + 0.2).toString();
+		petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+		// petal.style.filter = 'hue-rotate(320deg)'; // Optional visual tweak
+
+		const duration = Math.random() * 5 + 5;
+		petal.style.transition = `top ${duration}s linear, transform ${duration}s ease-in-out`;
+
+		container.appendChild(petal);
+
+		// Animate
+		setTimeout(() => {
+			petal.style.top = '100vh';
+			petal.style.transform = `rotate(${Math.random() * 360}deg) translateX(${Math.random() * 100 - 50}px)`;
+		}, 100);
+
+		// Remove
+		setTimeout(() => {
+			petal.remove();
+		}, duration * 1000);
+	}
+
+	// Create petals periodically
+	setInterval(createPetal, 2000);
+</script>

@@ -1,0 +1,230 @@
+---
+---
+
+<section id="letter" class="letter-section">
+  <div class="envelope-wrapper">
+    <div class="envelope" id="envelope">
+      <div class="flap top"></div>
+      <div class="flap right"></div>
+      <div class="flap bottom"></div>
+      <div class="flap left"></div>
+      
+      <div class="letter-content" id="letter-content">
+        <div class="paper">
+          <p class="greeting">¡Hola Coti, mi amor!</p>
+          <p class="line">Te escribi algo especial porque te lo re merecés.</p>
+          <p class="line">Desde ese 11 de agosto, mi vida cambió para siempre.</p>
+          <p class="line">Sos mi compañera, la unica persona que me elige siempre.</p>
+          <p class="line">Me tenés completamente enamorado, cada día un poco más.</p>
+          <p class="line">Gracias por bancarme de verdad y por elegirme siempre.</p>
+          <p class="line strong">Te amo con todo mi corazón, Bebita linda.</p>
+          <p class="signature">Tuyo siempre,<br><span>Fabri</span></p>
+        </div>
+      </div>
+      
+      <div class="seal">❤️</div>
+    </div>
+    <p class="instruction">Tocá el sobre para abrirlo, hermosa mia</p>
+  </div>
+</section>
+
+<style>
+  .letter-section {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #2d0a0a, #0a0a0a);
+    perspective: 1000px;
+    padding: 2rem;
+  }
+
+  .envelope-wrapper {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .envelope {
+    width: 300px;
+    height: 200px;
+    background: #c0392b; /* Rojo base */
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .envelope:hover {
+    transform: translateY(-5px);
+  }
+
+  .envelope.open {
+    transform: translateY(150px);
+  }
+
+  /* Flaps */
+  .flap {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 2;
+  }
+
+  .top {
+    top: 0;
+    left: 0;
+    border-width: 100px 150px 0 150px;
+    border-color: #e74c3c transparent transparent transparent; /* Rojo claro */
+    transform-origin: top;
+    transition: transform 0.6s 0.2s;
+    z-index: 5;
+  }
+
+  .envelope.open .top {
+    transform: rotateX(180deg);
+    z-index: 1;
+  }
+
+  .right {
+    top: 0;
+    right: 0;
+    border-width: 100px 100px 100px 0;
+    border-color: transparent #c0392b transparent transparent;
+    z-index: 2;
+  }
+
+  .bottom {
+    bottom: 0;
+    left: 0;
+    border-width: 0 150px 100px 150px;
+    border-color: transparent transparent #e74c3c transparent;
+    z-index: 3;
+  }
+
+  .left {
+    top: 0;
+    left: 0;
+    border-width: 100px 0 100px 100px;
+    border-color: transparent transparent transparent #c0392b;
+    z-index: 2;
+  }
+
+  .seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    z-index: 6;
+    transition: opacity 0.3s;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+  }
+
+  .envelope.open .seal {
+    opacity: 0;
+  }
+
+  /* Paper */
+  .letter-content {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 280px;
+    height: 180px;
+    background: transparent;
+    z-index: 1;
+    overflow: hidden;
+    transition: all 0.6s ease;
+  }
+  
+  .envelope.open .letter-content {
+    top: -250px;
+    height: 420px; /* Un poco más alto para el texto extra */
+    z-index: 4;
+    overflow: visible;
+  }
+
+  .paper {
+    background: #fdfbf7;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    color: #444;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-radius: 2px;
+    background-image: linear-gradient(#fdfbf7 95%, #e1e1e1 96%);
+    background-size: 100% 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.8s, transform 0.5s 0.8s;
+  }
+
+  .envelope.open .paper {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .greeting {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--fire-red);
+  }
+
+  .line {
+    font-size: 1.1rem; /* Texto un poco más legible */
+    line-height: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  /* Reveal animation */
+  .envelope.open .line:nth-child(2) { animation: reveal 0.8s 1.2s forwards; }
+  .envelope.open .line:nth-child(3) { animation: reveal 0.8s 1.6s forwards; }
+  .envelope.open .line:nth-child(4) { animation: reveal 0.8s 2.0s forwards; }
+  .envelope.open .line:nth-child(5) { animation: reveal 0.8s 2.4s forwards; }
+  .envelope.open .line:nth-child(6) { animation: reveal 0.8s 2.8s forwards; }
+  .envelope.open .line.strong { animation: reveal 0.8s 3.2s forwards; font-weight: 700; color: var(--fire-red); }
+  .envelope.open .signature { animation: reveal 0.8s 3.6s forwards; margin-top: 1.5rem; text-align: right; }
+
+  @keyframes reveal {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .instruction {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    animation: bounce 2s infinite;
+  }
+
+  @media (min-width: 768px) {
+    .envelope { width: 500px; height: 350px; }
+    .top { border-width: 175px 250px 0 250px; }
+    .right { border-width: 175px 175px 175px 0; }
+    .bottom { border-width: 0 250px 175px 250px; }
+    .left { border-width: 175px 0 175px 175px; }
+    
+    .letter-content { width: 480px; }
+    .envelope.open .letter-content { top: -300px; height: 500px; }
+    
+    .paper { padding: 3rem; font-size: 1.3rem; background-size: 100% 2rem; line-height: 2rem; }
+    .line { line-height: 2rem; margin-bottom: 1rem; }
+  }
+</style>
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const instruction = document.querySelector('.instruction') as HTMLElement;
+
+  if (envelope) {
+    envelope.addEventListener('click', () => {
+      envelope.classList.toggle('open');
+      if (instruction) instruction.style.opacity = '0';
+    });
+  }
+</script>

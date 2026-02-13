@@ -1,0 +1,133 @@
+---
+const goals = [
+  { title: "Trabajar Juntos", desc: "Codo a codo, bancándonos en cada proyecto y desafío.", icon: "🤝" },
+  { title: "Cumplir Metas", desc: "Todo lo que soñamos lo vamos a hacer realidad, te lo prometo.", icon: "🚀" },
+  { title: "Crecer a la Par", desc: "Seguir aprendiendo y mejorando, pero siempre de la mano.", icon: "🌱" },
+  { title: "Disfrutar la Vida", desc: "Viajes, salidas y momentos simples que nos llenen el alma.", icon: "✈️" },
+  { title: "Comernos el Mundo", desc: "Este año es nuestro, mi amor. No nos para nadie.", icon: "🔥" }
+];
+---
+
+<section id="goals" class="goals-section">
+  <div class="header-content">
+    <h2 class="section-title text-fire">Este año vamos por todo</h2>
+    <p class="subtitle">Juntos somos invencibles, Coti. Este 2026 la rompemos toda.</p>
+  </div>
+  
+  <div class="goals-grid">
+    {goals.map((goal, index) => (
+      <div class="goal-card glow-box" style={`animation-delay: ${index * 0.2}s`}>
+        <div class="icon-wrapper">{goal.icon}</div>
+        <h3>{goal.title}</h3>
+        <p>{goal.desc}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .goals-section {
+    padding: 6rem 1rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--bg-dark), var(--bg-dark-accent));
+  }
+
+  .header-content {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+  }
+
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .goal-card {
+    background: rgba(30, 30, 30, 0.4);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 60, 60, 0.1);
+    text-align: center;
+    transition: all 0.4s ease;
+    opacity: 0; /* For animation */
+    transform: translateY(30px);
+  }
+
+  .goal-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .goal-card:hover {
+    transform: translateY(-10px);
+    background: rgba(40, 40, 40, 0.6);
+    border-color: var(--fire-orange);
+    box-shadow: 0 10px 30px rgba(255, 60, 60, 0.15);
+  }
+
+  .icon-wrapper {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    filter: drop-shadow(0 0 10px rgba(255, 119, 48, 0.3));
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .goal-card:hover .icon-wrapper {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-family: var(--font-heading);
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-family: var(--font-body);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .section-title { font-size: 2.2rem; }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.goal-card').forEach(item => {
+    observer.observe(item);
+  });
+</script>
