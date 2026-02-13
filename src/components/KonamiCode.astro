@@ -1,0 +1,190 @@
+---
+---
+
+<div id="konami-overlay" class="konami-overlay"></div>
+
+<style>
+  .konami-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99999;
+    display: none;
+  }
+  
+  .ultra-mode .konami-overlay {
+    display: block;
+    animation: flash 0.5s;
+  }
+
+  @keyframes flash {
+    0%, 100% { background: rgba(255,255,255,0); }
+    50% { background: rgba(255,255,255,0.8); }
+  }
+
+  /* Ultra Romantic Styles injected globally */
+  :global(body.ultra-romantic-mode) {
+    animation: rainbow 5s infinite;
+  }
+
+  @keyframes rainbow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+</style>
+
+<script>
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
+                      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+  let konamiPosition = 0;
+  let konamiTimer: any;
+
+  // Keyboard Listener
+  document.addEventListener('keydown', (e) => {
+    clearTimeout(konamiTimer);
+    
+    if (e.key === konamiCode[konamiPosition]) {
+      konamiPosition++;
+      
+      if (konamiPosition === konamiCode.length) {
+        activateUltraRomanticMode();
+        konamiPosition = 0;
+        return;
+      }
+      
+      konamiTimer = setTimeout(() => {
+        konamiPosition = 0;
+      }, 2000);
+      
+    } else {
+      konamiPosition = 0;
+    }
+  });
+
+  // Touch/Swipe Listener
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    
+    if (Math.abs(diffX) > 50 || Math.abs(diffY) > 50) {
+      let key = '';
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        key = diffX > 0 ? 'ArrowRight' : 'ArrowLeft';
+      } else {
+        key = diffY > 0 ? 'ArrowDown' : 'ArrowUp';
+      }
+      
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: key }));
+    }
+  }, { passive: true });
+
+  function activateUltraRomanticMode() {
+    document.body.classList.add('ultra-romantic-mode');
+    
+    // 1. Flash
+    const overlay = document.getElementById('konami-overlay');
+    if (overlay) {
+        overlay.classList.add('ultra-mode');
+        setTimeout(() => overlay.classList.remove('ultra-mode'), 500);
+    }
+
+    // 2. Sound
+    playEpicSound();
+    
+    // 3. Hearts Rain
+    createHeartRain();
+    
+    // 4. Modal
+    showUltraModal();
+  }
+
+  function playEpicSound() {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    
+    // Simple chord
+    [440, 554, 659].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = freq;
+        osc.type = 'triangle';
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2);
+        osc.start(ctx.currentTime + i * 0.1);
+        osc.stop(ctx.currentTime + 2);
+    });
+  }
+
+  function createHeartRain() {
+    const emojis = ['❤️', '💖', '🔥', '🥰'];
+    for(let i=0; i<100; i++) {
+        const el = document.createElement('div');
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.position = 'fixed';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top = '-50px';
+        el.style.fontSize = Math.random() * 30 + 20 + 'px';
+        el.style.zIndex = '10002';
+        el.style.pointerEvents = 'none';
+        
+        document.body.appendChild(el);
+        
+        const anim = el.animate([
+            { transform: 'translateY(0) rotate(0)', opacity: 1 },
+            { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], {
+            duration: Math.random() * 2000 + 2000,
+            delay: Math.random() * 1000
+        });
+        
+        anim.onfinish = () => el.remove();
+    }
+  }
+
+  function showUltraModal() {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10005;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.5s;
+    `;
+    
+    modal.innerHTML = `
+        <div style="text-align: center; color: #ffd700; font-family: 'Playfair Display'; padding: 2rem; border: 2px solid gold; border-radius: 20px; background: rgba(20,0,0,0.9);">
+            <h1 style="font-size: 2rem; margin-bottom: 1rem;">¡CÓDIGO SECRETO! 🔓</h1>
+            <p style="font-size: 1.5rem; color: white;">Sos mi Konami Code favorito.</p>
+            <p style="font-size: 1.2rem; color: #ff3c3c; margin: 1rem 0;">Modo Ultra Romántico: ACTIVADO</p>
+            <button id="close-ultra" style="margin-top: 1rem; padding: 10px 30px; border-radius: 50px; background: linear-gradient(45deg, #ff3c3c, #ffb830); border: none; color: white; font-weight: bold; cursor: pointer;">Cerrar</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    document.getElementById('close-ultra')?.addEventListener('click', () => {
+        modal.remove();
+        document.body.classList.remove('ultra-romantic-mode');
+    });
+  }
+</script>

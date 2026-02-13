@@ -1,0 +1,223 @@
+---
+---
+
+<section id="si-fueras" class="si-fueras-section">
+  <div class="container">
+    <h2 class="section-title text-fire">Si fueras...</h2>
+    
+    <div class="cards-grid">
+      <!-- 1. Día -->
+      <div class="card">
+        <div class="icon">📅</div>
+        <p class="comparison">Si fueras un día, serías <strong>sábado</strong></p>
+      </div>
+
+      <!-- 2. Estación -->
+      <div class="card">
+        <div class="icon">🌸</div>
+        <p class="comparison">Si fueras una estación, serías <strong>primavera</strong></p>
+      </div>
+
+      <!-- 3. Comida -->
+      <div class="card">
+        <div class="icon">🍽️</div>
+        <p class="comparison">Si fueras una comida, serías <strong>milanesa con papas</strong></p>
+      </div>
+
+      <!-- 4. Canción -->
+      <div class="card">
+        <div class="icon">🔥</div>
+        <p class="comparison">Si fueras una canción, serías <strong>A Fuego</strong></p>
+      </div>
+
+      <!-- 5. Astro -->
+      <div class="card">
+        <div class="icon">🌟</div>
+        <p class="comparison">Si fueras un astro, serías el <strong>Sol</strong></p>
+      </div>
+
+      <!-- 6. Color -->
+      <div class="card">
+        <div class="icon">🎨</div>
+        <p class="comparison">Si fueras un color, serías el <strong>Rojo Pasión</strong></p>
+      </div>
+
+      <!-- 7. Bebida -->
+      <div class="card">
+        <div class="icon">☕</div>
+        <p class="comparison">Si fueras una bebida, serías <strong>café con dulce de leche</strong></p>
+      </div>
+
+      <!-- 8. Película -->
+      <div class="card">
+        <div class="icon">🎬</div>
+        <p class="comparison">Si fueras una película, serías la mejor <strong>Rom-Com</strong></p>
+      </div>
+
+      <!-- 9. Ciudad -->
+      <div class="card">
+        <div class="icon">🏙️</div>
+        <p class="comparison">Si fueras una ciudad, serías <strong>Buenos Aires</strong></p>
+      </div>
+
+      <!-- 10. Momento -->
+      <div class="card">
+        <div class="icon">⏰</div>
+        <p class="comparison">Si fueras un momento, serías el <strong>atardecer</strong></p>
+      </div>
+
+      <!-- 11. Flor -->
+      <div class="card">
+        <div class="icon">🌹</div>
+        <p class="comparison">Si fueras una flor, serías una <strong>rosa roja</strong></p>
+      </div>
+
+      <!-- 12. Libro -->
+      <div class="card">
+        <div class="icon">📖</div>
+        <p class="comparison">Si fueras un libro, serías <strong>mi favorito</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .si-fueras-section {
+    padding: 6rem 1rem;
+    background: #050505;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+  }
+
+  .section-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .card {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: translateY(50px);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--gold);
+    box-shadow: 0 10px 30px rgba(255, 60, 60, 0.2);
+    background: rgba(30, 30, 30, 0.8);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .card:hover::before {
+    left: 100%;
+  }
+
+  .icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    transition: transform 0.5s;
+  }
+
+  .card:hover .icon {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .comparison {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: #ddd;
+    line-height: 1.4;
+  }
+
+  .comparison strong {
+    color: var(--fire-orange);
+    display: block;
+    font-size: 1.6rem;
+    margin-top: 0.5rem;
+    text-shadow: 0 0 10px rgba(255, 119, 48, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px"
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // Animate only once
+      }
+    });
+  }, observerOptions);
+
+  const title = document.querySelector('.section-title');
+  if (title) observer.observe(title);
+
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card, index) => {
+    // Add staggered delay via inline style or CSS logic
+    // Using simple delay in JS for stagger effect
+    setTimeout(() => {
+        observer.observe(card);
+    }, index * 100); 
+  });
+</script>
