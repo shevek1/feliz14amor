@@ -2,323 +2,6 @@
 ---
 
 <div id="loading-screen" class="loading-screen">
-  <div class="heart-container">
-    <div class="heart-outline">❤️</div>
-    <div class="heart-fill"></div>
-  </div>
-  <p class="loading-text">Cargando amor<span class="dots">...</span></p>
-  <div class="progress-container">
-    <div class="progress-fill"></div>
-  </div>
-  <p class="percentage-text">0%</p>
-</div>
-
-<style>
-  .loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0a0a0a;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.5s ease;
-  }
-
-  .heart-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin-bottom: 2rem;
-    animation: pulseHeart 1s ease-in-out infinite;
-  }
-
-  .heart-outline {
-    font-size: 150px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: rgba(255, 60, 60, 0.2);
-    z-index: 1;
-    line-height: 1;
-  }
-
-  .heart-fill {
-    font-size: 150px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0%;
-    color: transparent;
-    background: linear-gradient(0deg, #ff3c3c, #ff7730, #ffb830);
-    -webkit-background-clip: text;
-    background-clip: text;
-    overflow: hidden;
-    z-index: 2;
-    transition: height 0.1s linear;
-    filter: drop-shadow(0 0 10px rgba(255, 60, 60, 0.5));
-    line-height: 1;
-    display: flex;
-    align-items: flex-end; /* Align text to bottom to mask correctly if simpler mask used, but background-clip specific needs full element.
-    Actually for text fill effect on emoji it's tricky. 
-    Better approach for Emoji fill: 
-    Clip-path or masking is harder with emojis.
-    Let's use an SVG for better control or a clever CSS trick.
-    CSS Trick: overflow hidden on container + matching text inside.
-    */
-  }
-  
-  /* Re-implementing heart fill for Emoji specifically requires distinct structure or SVG. 
-     The user requested Emoji or SVG. SVG is safer for "fill" effect. 
-     Let's use SVG path for the heart.
-  */
-  
-  .heart-svg {
-    width: 150px;
-    height: 150px;
-  }
-  
-  .loading-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    color: white;
-    text-shadow: 0 0 10px rgba(255, 60, 60, 0.5);
-    margin-bottom: 30px;
-}
-
-  .progress-container {
-    width: 300px;
-    height: 10px;
-    background: #1a1a1a;
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  }
-
-  @media (max-width: 768px) {
-    .progress-container { width: 80%; }
-  }
-
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #ff3c3c, #ff7730, #ffb830);
-    box-shadow: 0 0 20px rgba(255, 119, 48, 0.6);
-    position: relative;
-    transition: width 0.1s linear;
-  }
-
-  .progress-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 1s infinite;
-  }
-
-  .percentage-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffb830;
-    margin-top: 10px;
-  }
-
-  @keyframes pulseHeart {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-  }
-
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-
-  .dots { animation: dotsAnim 1.5s infinite; }
-  @keyframes dotsAnim {
-    0% { content: '.'; }
-    33% { content: '..'; }
-    66% { content: '...'; }
-  }
-  
-  /* SVG Mask styling */
-  .heart-shape {
-      fill: none;
-      stroke: rgba(255,60,60,0.2);
-      stroke-width: 2;
-  }
-  
-  .heart-fill-rect {
-      fill: url(#fire-gradient);
-      transition: y 0.1s linear;
-  }
-</style>
-
-<!-- Re-doing HTML structure for SVG Heart to ensure fill effect works perfectly -->
-<script>
-  // Replace the innerHTML of heart container with SVG if needed, but easier to just write it in template
-</script>
-
-<script>
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loading-screen');
-  const progressBar = document.querySelector('.progress-fill') as HTMLElement;
-  const percentage = document.querySelector('.percentage-text');
-  
-  // Custom Heart Fill logic for SVG
-  const fillRect = document.getElementById('fill-rect');
-  
-  if (!loader) return;
-
-  let progress = 0;
-  const duration = 2500; 
-  const interval = 20; 
-  const increment = (100 / duration) * interval;
-  
-  const timer = setInterval(() => {
-    progress += increment;
-    
-    // Cap at 100
-    if (progress >= 100) {
-      progress = 100;
-      clearInterval(timer);
-      
-      // Wait a bit then fade out
-      setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-          loader.style.display = 'none';
-        }, 500);
-      }, 500);
-    }
-    
-    // Update visual elements
-    if(progressBar) progressBar.style.width = progress + '%';
-    if(percentage) percentage.textContent = Math.floor(progress) + '%';
-    
-    // Update SVG fill (move y from 100% to 0%)
-    if(fillRect) {
-        // SVG viewbox is 0 0 24 24 usually, let's say.
-        // Or simply percentage height on a div if we use a mask.
-        // Let's stick to the div height approach for simplicity if we swap emojis for a masked div.
-    }
-    
-    // Specific fix for the "Fill" effect on the heart:
-    // We will use a clipped div.
-    const heartFillDiv = document.querySelector('.heart-fill-real') as HTMLElement;
-    if(heartFillDiv) heartFillDiv.style.height = progress + '%';
-
-  }, interval);
-});
-</script>
-
-<!-- Corrected Markup for Heart Fill Effect -->
-<!-- Re-writing the markup section to use the mask approach which is robust -->
-<div id="loading-screen" class="loading-screen">
-  <div class="heart-wrapper">
-    <!-- Base empty heart -->
-    <div class="heart-base">❤️</div>
-    <!-- Filling heart (masked) -->
-    <div class="heart-fill-container">
-        <div class="heart-fill-real"></div>
-        <div class="heart-mask">❤️</div>
-    </div>
-  </div>
-  
-  <p class="loading-text">Cargando amor<span class="dots">...</span></p>
-  
-  <div class="progress-container">
-    <div class="progress-fill"></div>
-  </div>
-  <p class="percentage-text">0%</p>
-</div>
-
-<style>
-/* Overriding previous styles with Specific Heart Styles */
-.heart-wrapper {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin-bottom: 2rem;
-    animation: pulseHeart 1s ease-in-out infinite;
-}
-
-.heart-base {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333; /* Dark/Outline color */
-    z-index: 1;
-}
-
-.heart-fill-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-}
-
-.heart-fill-real {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0%; /* Animates */
-    background: linear-gradient(0deg, #ff3c3c, #ff7730, #ffd700);
-    transition: height 0.05s linear;
-}
-
-.heart-mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0a0a0a; /* Matches loading screen bg */
-    color: black;
-    mix-blend-mode: screen; /* Magic trick: black becomes transparent, white (text) keeps background */
-    /* Wait, mix-blend-mode screen makes black transparent showing what's behind? 
-       Actually 'screen': Result = 1 - (1-Target) * (1-Blend).
-       If Background is Black (0), Result = Blend.
-       If Blend is Black (text), it shows nothing?
-       
-       Standard approach: Text as mask.
-       -webkit-background-clip: text; color: transparent on the FILL element doesn't work easily with "height" animation of the background itself unless background-size is manipulated.
-       
-       Let's try background-size approach.
-    */
-}
-
-.heart-text-clip {
-    font-size: 100px;
-    background: linear-gradient(0deg, #ff3c3c 50%, #333 50%);  /* Hard to animate smoothly */
-    /* Let's go with SVG, it's fool proof */
-}
-</style>
-
-<!-- Final attempt structure using INLINE SVG for maximum control -->
-<div id="loading-screen" class="loading-screen">
   <div class="heart-pulse-container">
       <svg width="120" height="120" viewBox="0 0 24 24" class="heart-svg">
         <defs>
@@ -332,11 +15,9 @@ window.addEventListener('load', () => {
           </mask>
         </defs>
         
-        <!-- Outline / Background Heart -->
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
               fill="#333" />
               
-        <!-- Filled Heart using Mask -->
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
               fill="url(#fireGradient)" mask="url(#fillMask)" />
       </svg>
@@ -351,7 +32,6 @@ window.addEventListener('load', () => {
 </div>
 
 <style>
-/* Resetting styles for this specific component structure */
 .loading-screen {
     position: fixed;
     top: 0;
@@ -397,6 +77,7 @@ window.addEventListener('load', () => {
     background: linear-gradient(90deg, #ff3c3c, #ff7730, #ffd700);
     position: relative;
     box-shadow: 0 0 15px #ff3c3c;
+    transition: width 0.1s linear;
 }
 
 .percentage-txt {
@@ -410,6 +91,13 @@ window.addEventListener('load', () => {
     from { transform: scale(1); }
     to { transform: scale(1.1); }
 }
+
+.dots { animation: dotsAnim 1.5s infinite; }
+@keyframes dotsAnim {
+  0% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
+}
 </style>
 
 <script>
@@ -419,17 +107,17 @@ window.addEventListener('load', () => {
     const bar = document.querySelector('.progress-bar-fill') as HTMLElement;
     const txt = document.querySelector('.percentage-txt');
     
-    // Prevent multiple executions if already hidden
-    if(!screen || screen.style.opacity === '0') return;
+    // Safety check with safer opacity read
+    if(!screen) return;
+    if(screen.style.opacity === '0' || screen.style.visibility === 'hidden') return;
     
     let pct = 0;
     const interval = setInterval(() => {
-        pct += 2; 
+        pct += 3; // Even faster
         
         if(bar) bar.style.width = Math.min(pct, 100) + '%';
         if(txt) txt.textContent = Math.min(pct, 100) + '%';
         
-        // Update Heart Fill Mask
         if (fillRect) {
             const yVal = 24 - (24 * (pct/100));
             fillRect.setAttribute('y', yVal.toString());
@@ -439,30 +127,28 @@ window.addEventListener('load', () => {
             clearInterval(interval);
             setTimeout(() => {
                 screen.style.opacity = '0';
-                screen.style.visibility = 'hidden';
-                screen.style.pointerEvents = 'none';
-            }, 500);
+                screen.style.pointerEvents = 'none'; // Immediate unblock
+                setTimeout(() => {
+                  screen.style.visibility = 'hidden';
+                }, 500);
+            }, 300);
         }
-    }, 40);
+    }, 50);
   }
 
-  // Initialize
-  if (document.readyState === 'complete') {
-    initLoader();
-  } else {
-    window.addEventListener('load', initLoader);
-  }
+  // Force Start immediately
+  initLoader();
   
-  // Safety Fallback: Force hide after 5 seconds no matter what
+  // Double check on load
+  window.onload = initLoader;
+  
+  // FAILSAFE: Hard remove after 5 seconds
   setTimeout(() => {
       const screen = document.getElementById('loading-screen');
-      if(screen && screen.style.opacity !== '0') {
-          console.log('Force hiding loader');
+      if(screen) {
           screen.style.opacity = '0';
-          setTimeout(() => {
-            screen.style.visibility = 'hidden';
-            screen.style.pointerEvents = 'none';
-          }, 500);
+          screen.style.pointerEvents = 'none';
+          setTimeout(() => screen.style.visibility = 'hidden', 500);
       }
   }, 5000);
 </script>
