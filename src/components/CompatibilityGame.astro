@@ -1,0 +1,445 @@
+---
+---
+
+<section id="game" class="game-section">
+  <div class="game-container">
+    <h2 class="title text-fire">¿Qué tan compatibles somos? 🔥</h2>
+    
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen active">
+        <div class="intro-icon">❤️🔥</div>
+        <p>Vamos a ver qué dicen los datos...</p>
+        <button id="start-btn" class="fire-btn">Comenzar Test</button>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="question-screen" class="screen hidden">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="heart-indicator" id="heart-indicator">❤️</div>
+        </div>
+        <div class="question-counter">Pregunta <span id="current-q">1</span>/<span id="total-q">10</span></div>
+        
+        <h3 id="question-text">¿Pregunta?</h3>
+        
+        <div class="options-grid">
+            <button class="option-btn" data-opt="0">
+                <span class="opt-emoji">🍕</span>
+                <span class="opt-text">Pizza</span>
+            </button>
+            <button class="option-btn" data-opt="1">
+                <span class="opt-emoji">🍔</span>
+                <span class="opt-text">Hamburguesa</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen hidden">
+        <div class="spinner">❤️</div>
+        <h3>Calculando compatibilidad...</h3>
+        <p class="loading-text">Analizando respuestas...</p>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="screen hidden">
+        <div class="result-heart">
+            <div class="heart-fill"></div>
+            <span class="percentage">100%</span>
+        </div>
+        
+        <h3 class="result-title">¡SOMOS 100% COMPATIBLES!</h3>
+        <p id="result-subtext" class="result-subtext">¡El universo nos hizo el uno para el otro!</p>
+        
+        <div class="stats-box">
+            <div class="stat">
+                <span class="stat-label">Probabilidad de amarnos:</span>
+                <span class="stat-value">♾️%</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Nivel de cursilería:</span>
+                <span class="stat-value text-fire">OVER 9000</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Científicos lo confirman:</span>
+                <span class="stat-value">Todos 🔬</span>
+            </div>
+        </div>
+
+        <button id="restart-btn" class="fire-btn small">Jugar otra vez</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .game-section {
+    padding: 6rem 1rem;
+    background: #000;
+    display: flex;
+    justify-content: center;
+  }
+
+  .game-container {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255, 60, 60, 0.1);
+    min-height: 500px; /* Prevent layout shift */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s;
+  }
+
+  .hidden {
+    display: none !important;
+    opacity: 0;
+  }
+
+  /* Start Screen */
+  .intro-icon { font-size: 5rem; margin-bottom: 1rem; animation: pulse 1.5s infinite; }
+  
+  /* Buttons */
+  .fire-btn {
+    background: linear-gradient(45deg, var(--fire-red), var(--fire-orange));
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 5px 15px rgba(255, 60, 60, 0.4);
+  }
+
+  .fire-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255, 119, 48, 0.6); }
+  .fire-btn.small { padding: 0.8rem 1.5rem; font-size: 1rem; }
+
+  /* Progress Bar */
+  .progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--fire-orange), var(--fire-red));
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .heart-indicator {
+    position: absolute;
+    top: -12px;
+    left: 0%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    transition: left 0.5s ease;
+  }
+
+  /* Question */
+  .question-counter { color: var(--text-muted); margin-bottom: 1rem; }
+  #question-text { font-size: 1.8rem; margin-bottom: 2rem; min-height: 3rem; }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .option-btn {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 15px;
+    padding: 2rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .option-btn:hover {
+    border-color: var(--fire-orange);
+    background: rgba(255, 60, 60, 0.1);
+    transform: translateY(-5px);
+  }
+
+  .opt-emoji { font-size: 3rem; }
+  .opt-text { font-size: 1.2rem; color: #fff; }
+
+  /* Loading */
+  .spinner {
+    font-size: 4rem;
+    animation: spin 2s linear infinite;
+    margin-bottom: 1rem;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+
+  /* Result */
+  .result-heart {
+    width: 150px;
+    height: 150px;
+    background: #333;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+    -webkit-mask-size: contain;
+    position: relative;
+    margin-bottom: 1.5rem;
+    animation: heartbeat 1s infinite alternate;
+  }
+
+  .heart-fill {
+    width: 100%;
+    height: 0%;
+    background: var(--fire-red);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: height 2s ease-out;
+  }
+
+  .percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    z-index: 2;
+    text-shadow: 0 0 10px black;
+  }
+
+  @keyframes heartbeat { to { transform: scale(1.1); } }
+
+  .result-title { font-size: 1.8rem; color: var(--gold); margin-bottom: 0.5rem; }
+  .result-subtext { font-size: 1.2rem; margin-bottom: 2rem; min-height: 3rem; font-style: italic; }
+
+  .stats-box {
+    background: rgba(0,0,0,0.3);
+    padding: 1.5rem;
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  
+  .stat { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px dotted #444; padding-bottom: 0.5rem; }
+  .stat:last-child { border-bottom: none; margin-bottom: 0; }
+  .stat-label { color: #aaa; text-align: left; }
+  .stat-value { font-weight: bold; color: #fff; }
+
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .option-btn { padding: 1rem; flex-direction: row; justify-content: start; gap: 1.5rem; }
+    .question-counter { font-size: 0.9rem; }
+    #question-text { font-size: 1.4rem; }
+  }
+</style>
+
+<script>
+  const questions = [
+    { text: "¿Pizza o hamburguesa?", options: [{ e: "🍕", t: "Pizza" }, { e: "🍔", t: "Hamburguesa" }] },
+    { text: "¿Perros o gatos?", options: [{ e: "🐶", t: "Perros" }, { e: "🐱", t: "Gatos" }] },
+    { text: "¿Playa o montaña?", options: [{ e: "🏖️", t: "Playa" }, { e: "⛰️", t: "Montaña" }] },
+    { text: "¿Netflix o salir?", options: [{ e: "📺", t: "Netflix" }, { e: "🎉", t: "Salir" }] },
+    { text: "¿Café o té?", options: [{ e: "☕", t: "Café" }, { e: "🍵", t: "Té" }] },
+    { text: "¿Dormir o desvelarse?", options: [{ e: "😴", t: "Dormir" }, { e: "🌙", t: "Desvelarse" }] },
+    { text: "¿Tacos o sushi?", options: [{ e: "🌮", t: "Tacos" }, { e: "🍣", t: "Sushi" }] },
+    { text: "¿Verano o invierno?", options: [{ e: "☀️", t: "Verano" }, { e: "❄️", t: "Invierno" }] },
+    { text: "¿Hablar o escuchar música?", options: [{ e: "🗣️", t: "Hablar" }, { e: "🎵", t: "Escuchar" }] },
+    { text: "¿Dulce o salado?", options: [{ e: "🍰", t: "Dulce" }, { e: "🍟", t: "Salado" }] }
+  ];
+
+  const resultPhrases = [
+    "¡Ya lo sabíamos! 🔥❤️",
+    "¡Match perfecto desde el día 1!",
+    "¡El universo nos hizo el uno para el otro!",
+    "¡La ciencia lo confirma: son almas gemelas!",
+    "¡100% compatible = 100% enamorado!",
+    "¡Este test nunca falla (porque ya sos perfecta para mí)!"
+  ];
+
+  let currentIdx = 0;
+
+  // Elems
+  const startScreen = document.getElementById('start-screen');
+  const questionScreen = document.getElementById('question-screen');
+  const loadingScreen = document.getElementById('loading-screen');
+  const resultScreen = document.getElementById('result-screen');
+  
+  const startBtn = document.getElementById('start-btn');
+  const restartBtn = document.getElementById('restart-btn');
+  
+  // Question Elems
+  const qText = document.getElementById('question-text');
+  const qNum = document.getElementById('current-q');
+  const qTotal = document.getElementById('total-q');
+  const fill = document.getElementById('progress-fill');
+  const indicator = document.getElementById('heart-indicator');
+  const optionBtns = document.querySelectorAll('.option-btn');
+  
+  // Init
+  if (qTotal) qTotal.textContent = questions.length.toString();
+
+  function showScreen(screen) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      screen.classList.remove('hidden');
+  }
+
+  function loadQuestion(idx) {
+      if (!questions[idx]) return;
+      
+      const q = questions[idx];
+      if (qText) qText.textContent = q.text;
+      if (qNum) qNum.textContent = (idx + 1).toString();
+      
+      // Update Options
+      optionBtns.forEach((btn, i) => {
+          const opt = q.options[i];
+          const emojiSpan = btn.querySelector('.opt-emoji');
+          const textSpan = btn.querySelector('.opt-text');
+          if (emojiSpan) emojiSpan.textContent = opt.e;
+          if (textSpan) textSpan.textContent = opt.t;
+      });
+
+      // Update Progress
+      const percent = ((idx) / questions.length) * 100;
+      if (fill) fill.style.width = percent + '%';
+      if (indicator) indicator.style.left = percent + '%';
+  }
+
+  // Events
+  startBtn?.addEventListener('click', () => {
+      currentIdx = 0;
+      loadQuestion(0);
+      showScreen(questionScreen);
+  });
+
+  optionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+          // Fire effect on click
+          createClickFire(btn);
+
+          setTimeout(() => {
+              currentIdx++;
+              if (currentIdx < questions.length) {
+                  loadQuestion(currentIdx);
+              } else {
+                  showLoading();
+              }
+          }, 300);
+      });
+  });
+
+  function showLoading() {
+      showScreen(loadingScreen);
+      // Simulate calculation
+      setTimeout(() => {
+          showResult();
+      }, 2500);
+  }
+
+  function showResult() {
+      showScreen(resultScreen);
+      
+      // Pick random subtext
+      const subtext = document.getElementById('result-subtext');
+      if (subtext) subtext.textContent = resultPhrases[Math.floor(Math.random() * resultPhrases.length)];
+
+      // Animate Heart fill
+      setTimeout(() => {
+          const heartFill = document.querySelector('.heart-fill') as HTMLElement;
+          if (heartFill) heartFill.style.height = '100%';
+          fireConfetti();
+      }, 500);
+  }
+
+  restartBtn?.addEventListener('click', () => {
+      currentIdx = 0;
+      // Reset heart
+      const heartFill = document.querySelector('.heart-fill') as HTMLElement;
+      if (heartFill) heartFill.style.height = '0%';
+      showScreen(startScreen);
+  });
+
+  // Helper: Click Fire
+  function createClickFire(el) {
+      // Just a small visual feedback could go here, 
+      // but the confetti typically handles the big finale.
+  }
+
+  // Confetti Logic
+  function fireConfetti() {
+    const duration = 3000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        // Safe check for confetti global if using canvas-confetti via CDN, 
+        // but here we will implement a simple DOM based one for safety if library missing
+        // or just re-use the EasterEgg logic logic if we want.
+        // For simplicity let's stick to the EasterEgg one? 
+        // Or inject simplified particles here.
+        
+        for(let i=0; i<5; i++) {
+           spawnConfettiParticle(); // Custom function
+        }
+        
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+  }
+
+  function spawnConfettiParticle() {
+      const p = document.createElement('div');
+      p.innerHTML = ['❤️', '🔥', '✨'][Math.floor(Math.random() * 3)];
+      p.style.position = 'fixed';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = '-10px';
+      p.style.fontSize = Math.random() * 20 + 10 + 'px';
+      p.style.zIndex = '9999';
+      p.style.pointerEvents = 'none';
+      document.body.appendChild(p);
+
+      const anim = p.animate([
+          { transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+          { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+      ], {
+          duration: Math.random() * 2000 + 1000,
+          easing: 'linear' 
+      });
+
+      anim.onfinish = () => p.remove();
+  }
+</script>
