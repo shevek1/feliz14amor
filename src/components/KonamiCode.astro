@@ -34,13 +34,227 @@
     0% { filter: hue-rotate(0deg); }
     100% { filter: hue-rotate(360deg); }
   }
+
+  /* ==========================================
+     COUNTDOWN ANTES DEL VIDEO
+     ========================================== */
+
+  :global(.countdown-overlay) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  :global(.countdown-content) {
+    text-align: center;
+  }
+
+  :global(.countdown-text) {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: #ffd700;
+    margin: 0 0 30px 0;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    animation: pulse 1s ease infinite;
+  }
+
+  :global(.countdown-number) {
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: bold;
+    color: #ff3c3c;
+    margin: 0;
+    text-shadow: 0 0 40px rgba(255, 60, 60, 0.8),
+                 0 0 80px rgba(255, 60, 60, 0.4);
+    animation: countPulse 0.8s ease;
+  }
+
+  @keyframes countPulse {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* ==========================================
+     VIDEO FULLSCREEN TIPO TIKTOK
+     ========================================== */
+
+  :global(.fullscreen-video-mode) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background: #000;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  :global(.tiktok-video-container) {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+  }
+
+  :global(.tiktok-video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :global(.tiktok-close-btn) {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 100001;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global(.tiktok-close-btn:hover) {
+    background: rgba(255, 60, 60, 0.8);
+    transform: scale(1.1);
+  }
+
+  :global(.video-overlay) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 80px 20px 40px;
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.4) 0%,
+      transparent 20%,
+      transparent 80%,
+      rgba(0,0,0,0.5) 100%
+    );
+    transition: opacity 0.3s ease;
+  }
+
+  :global(.overlay-top) { text-align: center; }
+
+  :global(.video-title) {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    margin: 0;
+    animation: slideDown 0.5s ease;
+  }
+
+  :global(.overlay-bottom) { text-align: left; padding-left: 20px; }
+
+  :global(.video-caption) {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+  }
+
+  :global(.video-date) {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #ffd700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    margin: 0;
+  }
+
+  :global(.tiktok-controls) {
+    position: absolute;
+    right: 15px;
+    bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 100001;
+    transition: opacity 0.3s ease;
+  }
+
+  :global(.control-btn) {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+  }
+
+  :global(.control-btn:hover) {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @media (max-width: 768px) {
+    :global(.countdown-text) { font-size: 24px; }
+    :global(.countdown-number) { font-size: 80px; }
+    
+    :global(.tiktok-controls) { right: 10px; bottom: 100px; gap: 15px; }
+    :global(.control-btn) { width: 45px; height: 45px; font-size: 20px; }
+  }
 </style>
 
 <script>
+  // @ts-nocheck
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
                       'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
   let konamiPosition = 0;
-  let konamiTimer: any;
+  let konamiTimer;
 
   // Keyboard Listener
   document.addEventListener('keydown', (e) => {
@@ -64,13 +278,22 @@
     }
   });
 
-  // Touch/Swipe Listener
+  // Touch Logic
   let touchStartX = 0;
   let touchStartY = 0;
 
   document.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
+    
+    // Auto Show/Hide Controls logic integration for touch
+    const modal = document.querySelector('.fullscreen-video-mode');
+    if (modal && !e.target.closest('.control-btn') && !e.target.closest('.tiktok-close-btn')) {
+        const controls = modal.querySelector('.tiktok-controls');
+        const isHidden = controls.style.opacity === '0';
+        if (isHidden) showControls(modal);
+        else hideControls(modal);
+    }
   }, { passive: true });
 
   document.addEventListener('touchend', (e) => {
@@ -92,99 +315,203 @@
     }
   }, { passive: true });
 
+  // Main Activation Function
   function activateUltraRomanticMode() {
-    document.body.classList.add('ultra-romantic-mode');
-    
     // 1. Flash
-    const overlay = document.getElementById('konami-overlay');
-    if (overlay) {
-        overlay.classList.add('ultra-mode');
-        setTimeout(() => overlay.classList.remove('ultra-mode'), 500);
-    }
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: white; z-index: 99999; animation: flashFade 0.4s ease;
+    `;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 400);
 
-    // 2. Sound
+    // 2. Vibration
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+
+    // 3. Sound
     playEpicSound();
-    
-    // 3. Hearts Rain
+
+    // 4. Hearts Rain
     createHeartRain();
+
+    // 5. Countdown -> Video
+    setTimeout(showCountdown, 1500);
+
+    // 6. Global Class
+    document.body.classList.add('ultra-romantic-mode');
+  }
+
+  function showCountdown() {
+    const countdown = document.createElement('div');
+    countdown.className = 'countdown-overlay';
+    countdown.innerHTML = `
+      <div class="countdown-content">
+        <p class="countdown-text">Preparate...</p>
+        <p class="countdown-number">3</p>
+      </div>
+    `;
+    document.body.appendChild(countdown);
     
-    // 4. Modal
-    showUltraModal();
+    let count = 3;
+    const numEl = countdown.querySelector('.countdown-number');
+    const txtEl = countdown.querySelector('.countdown-text');
+    
+    const interval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        numEl.textContent = count;
+        numEl.style.animation = 'none';
+        setTimeout(() => numEl.style.animation = 'countPulse 0.8s ease', 10);
+      } else {
+        clearInterval(interval);
+        txtEl.textContent = '¡AHORA!';
+        numEl.style.display = 'none';
+        
+        setTimeout(() => {
+          countdown.remove();
+          showUltraRomanticVideo();
+        }, 500);
+      }
+    }, 1000);
+  }
+
+  function showUltraRomanticVideo() {
+    const modal = document.createElement('div');
+    modal.className = 'ultra-romantic-modal fullscreen-video-mode';
+    modal.innerHTML = `
+      <div class="tiktok-video-container">
+        <button id="close-tiktok-btn" class="tiktok-close-btn">✕</button>
+        
+        <video id="secret-video" class="tiktok-video" autoplay loop playsinline>
+          <source src="/secret/video-especial.mp4" type="video/mp4">
+          <!-- Fallback Visual -->
+          <div style="width:100%;height:100%;background:linear-gradient(45deg,#ff3c3c,#ffa502);display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;">VIDEO COMING SOON ❤️</div>
+        </video>
+        
+        <div class="video-overlay">
+          <div class="overlay-top">
+            <p class="video-title">🔓 Video Secreto Desbloqueado</p>
+          </div>
+          <div class="overlay-bottom">
+            <p class="video-caption">Esto es solo para vos<br>Mi amor ❤️🔥</p>
+            <p class="video-date">San Valentín 2026</p>
+          </div>
+        </div>
+        
+        <div class="tiktok-controls">
+          <button id="play-toggle" class="control-btn"><span id="play-icon">⏸️</span></button>
+          <button id="sound-toggle" class="control-btn"><span id="sound-icon">🔊</span></button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    setTimeout(() => modal.style.opacity = '1', 50);
+
+    // Event Listeners
+    document.getElementById('close-tiktok-btn').onclick = closeUltraModal;
+    
+    document.getElementById('play-toggle').onclick = (e) => {
+        e.stopPropagation();
+        const v = document.getElementById('secret-video');
+        const icon = document.getElementById('play-icon');
+        if (v.paused) { v.play(); icon.textContent = '⏸️'; } 
+        else { v.pause(); icon.textContent = '▶️'; }
+    };
+    
+    document.getElementById('sound-toggle').onclick = (e) => {
+        e.stopPropagation();
+        const v = document.getElementById('secret-video');
+        const icon = document.getElementById('sound-icon');
+        v.muted = !v.muted;
+        icon.textContent = v.muted ? '🔇' : '🔊';
+    };
+
+    setupAutoHideControls(modal);
+  }
+
+  let controlsTimeout;
+  function showControls(modal) {
+    const c = modal.querySelector('.tiktok-controls');
+    const x = modal.querySelector('.tiktok-close-btn');
+    const o = modal.querySelector('.video-overlay');
+    
+    if(c) c.style.opacity = '1';
+    if(x) x.style.opacity = '1';
+    if(o) o.style.opacity = '1';
+  }
+
+  function hideControls(modal) {
+    const c = modal.querySelector('.tiktok-controls');
+    const x = modal.querySelector('.tiktok-close-btn');
+    const o = modal.querySelector('.video-overlay');
+    
+    if(c) c.style.opacity = '0';
+    if(x) x.style.opacity = '0';
+    if(o) o.style.opacity = '0';
+  }
+
+  function setupAutoHideControls(modal) {
+    // Start visible
+    controlsTimeout = setTimeout(() => hideControls(modal), 3000);
+    
+    modal.addEventListener('mousemove', () => {
+        showControls(modal);
+        clearTimeout(controlsTimeout);
+        controlsTimeout = setTimeout(() => hideControls(modal), 3000);
+    });
+  }
+
+  function closeUltraModal() {
+    const modal = document.querySelector('.ultra-romantic-modal');
+    if (!modal) return;
+    
+    modal.style.opacity = '0';
+    setTimeout(() => {
+        modal.remove();
+        document.body.classList.remove('ultra-romantic-mode');
+    }, 500);
+  }
+
+  function createHeartRain() {
+      const emojis = ['❤️', '💖', '🔥', '🥰'];
+      for(let i=0; i<100; i++) {
+          const el = document.createElement('div');
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          el.style.position = 'fixed';
+          el.style.left = Math.random() * 100 + 'vw';
+          el.style.top = '-50px';
+          el.style.fontSize = Math.random() * 30 + 20 + 'px';
+          el.style.zIndex = '99997';
+          el.style.pointerEvents = 'none';
+          document.body.appendChild(el);
+          
+          el.animate([
+              { transform: 'translateY(0)', opacity: 1 },
+              { transform: `translateY(100vh)`, opacity: 0 }
+          ], {
+              duration: Math.random() * 2000 + 2000,
+              delay: Math.random() * 1000
+          }).onfinish = () => el.remove();
+      }
   }
 
   function playEpicSound() {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
     const ctx = new AudioContext();
-    
-    // Simple chord
-    [440, 554, 659].forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.value = freq;
-        osc.type = 'triangle';
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2);
-        osc.start(ctx.currentTime + i * 0.1);
-        osc.stop(ctx.currentTime + 2);
-    });
-  }
-
-  function createHeartRain() {
-    const emojis = ['❤️', '💖', '🔥', '🥰'];
-    for(let i=0; i<100; i++) {
-        const el = document.createElement('div');
-        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        el.style.position = 'fixed';
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.top = '-50px';
-        el.style.fontSize = Math.random() * 30 + 20 + 'px';
-        el.style.zIndex = '10002';
-        el.style.pointerEvents = 'none';
-        
-        document.body.appendChild(el);
-        
-        const anim = el.animate([
-            { transform: 'translateY(0) rotate(0)', opacity: 1 },
-            { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-        ], {
-            duration: Math.random() * 2000 + 2000,
-            delay: Math.random() * 1000
-        });
-        
-        anim.onfinish = () => el.remove();
-    }
-  }
-
-  function showUltraModal() {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.9);
-        z-index: 10005;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.5s;
-    `;
-    
-    modal.innerHTML = `
-        <div style="text-align: center; color: #ffd700; font-family: 'Playfair Display'; padding: 2rem; border: 2px solid gold; border-radius: 20px; background: rgba(20,0,0,0.9);">
-            <h1 style="font-size: 2rem; margin-bottom: 1rem;">¡CÓDIGO SECRETO! 🔓</h1>
-            <p style="font-size: 1.5rem; color: white;">Sos mi Konami Code favorito.</p>
-            <p style="font-size: 1.2rem; color: #ff3c3c; margin: 1rem 0;">Modo Ultra Romántico: ACTIVADO</p>
-            <button id="close-ultra" style="margin-top: 1rem; padding: 10px 30px; border-radius: 50px; background: linear-gradient(45deg, #ff3c3c, #ffb830); border: none; color: white; font-weight: bold; cursor: pointer;">Cerrar</button>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    document.getElementById('close-ultra')?.addEventListener('click', () => {
-        modal.remove();
-        document.body.classList.remove('ultra-romantic-mode');
+    const now = ctx.currentTime;
+    [440, 554, 659].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.frequency.value = f;
+        o.connect(g);
+        g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.1, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 2);
+        o.start(now + i*0.1);
+        o.stop(now + 2);
     });
   }
 </script>
