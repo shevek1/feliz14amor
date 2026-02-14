@@ -251,19 +251,33 @@
 
 <script>
   // @ts-nocheck
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
-                      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+  // Detectar Video vs Touch
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  // Código Desktop: Clásico (Flechas)
+  const desktopCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
+                       'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+                       
+  // Código Mobile: SIMPLIFICADO (Solo Arriba x2, Abajo x2)
+  // Quité izquierda/derecha porque en el celu te mueven la pantalla history back/forward
+  const mobileCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'];
+  
+  const activeCode = isTouchDevice ? mobileCode : desktopCode;
+  
   let konamiPosition = 0;
   let konamiTimer;
 
-  // Keyboard Listener
+  // --- 1. LISTENER DE TECLADO (PC) ---
   document.addEventListener('keydown', (e) => {
+    // Si es touch, permitimos teclado igual por si conecta uno, pero priorizamos touch logic
+    const codeToUse = desktopCode; 
+    
     clearTimeout(konamiTimer);
     
-    if (e.key === konamiCode[konamiPosition]) {
+    if (e.key === codeToUse[konamiPosition]) {
       konamiPosition++;
       
-      if (konamiPosition === konamiCode.length) {
+      if (konamiPosition === codeToUse.length) {
         activateUltraRomanticMode();
         konamiPosition = 0;
         return;
@@ -278,15 +292,17 @@
     }
   });
 
-  // Touch Logic
+  // --- 2. LISTENER DE SWIPES (CELULAR) ---
   let touchStartX = 0;
   let touchStartY = 0;
+  let swipePosition = 0; // Posición separada para swipes
+  let swipeTimer;
 
   document.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     
-    // Auto Show/Hide Controls logic integration for touch
+    // Auto Show/Hide Controls logic integration for touch (Visual controls)
     const modal = document.querySelector('.fullscreen-video-mode');
     if (modal && !e.target.closest('.control-btn') && !e.target.closest('.tiktok-close-btn')) {
         const controls = modal.querySelector('.tiktok-controls');
@@ -303,17 +319,58 @@
     const diffX = touchEndX - touchStartX;
     const diffY = touchEndY - touchStartY;
     
-    if (Math.abs(diffX) > 50 || Math.abs(diffY) > 50) {
-      let key = '';
+    // Detectar Swipe
+    if (Math.abs(diffX) > 40 || Math.abs(diffY) > 40) { // Sensibilidad aumentada (40px)
+      let swipeKey = '';
       if (Math.abs(diffX) > Math.abs(diffY)) {
-        key = diffX > 0 ? 'ArrowRight' : 'ArrowLeft';
+        swipeKey = diffX > 0 ? 'ArrowRight' : 'ArrowLeft';
       } else {
-        key = diffY > 0 ? 'ArrowDown' : 'ArrowUp';
+        swipeKey = diffY > 0 ? 'ArrowDown' : 'ArrowUp';
       }
       
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: key }));
+      // Lógica de validación Swipe
+      clearTimeout(swipeTimer);
+      
+      // Usamos mobileCode siempre para swipes
+      if (swipeKey === mobileCode[swipePosition]) {
+          swipePosition++;
+          
+          // Feedback de vibración suave para saber que va bien
+          if(navigator.vibrate) navigator.vibrate(30); 
+          
+          if (swipePosition === mobileCode.length) {
+              activateUltraRomanticMode();
+              swipePosition = 0;
+              return;
+          }
+          
+          // Más tiempo para swipear (3 seg)
+          swipeTimer = setTimeout(() => { swipePosition = 0; }, 3000);
+      } else {
+          swipePosition = 0;
+      }
     }
   }, { passive: true });
+
+  // --- 3. NUEVO: TAP SECRETO (Opción más fácil) ---
+  // Tocar 5 veces rápido en cualquier lado también activa (por si los swipes fallan)
+  let tapCount = 0;
+  let tapTimer;
+  
+  document.addEventListener('click', (e) => {
+      // Ignorar clicks en botones interactivos
+      if(e.target.closest('button') || e.target.closest('a')) return;
+
+      clearTimeout(tapTimer);
+      tapCount++;
+      
+      if(tapCount >= 5) {
+          activateUltraRomanticMode();
+          tapCount = 0;
+      }
+      
+      tapTimer = setTimeout(() => { tapCount = 0; }, 500); // Tienen que ser rápidos
+  });
 
   // Main Activation Function
   function activateUltraRomanticMode() {
